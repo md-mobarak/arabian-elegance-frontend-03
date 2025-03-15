@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Footer from "@/components/Footer";
-import CartDrawer from "@/components/CartDrawer";
+// import CartDrawer from "@/components/CartDrawer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
