@@ -8,14 +8,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { PulseLoader } from 'react-spinners';
-import Image from 'next/image'; // Ensure Image is imported
+
 import { baseUrl } from '@/utils/api';
 
 const api = axios.create({
   baseURL: baseUrl,
 });
-
-export default function LoginPage() {
+ function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -133,3 +132,4 @@ export default function LoginPage() {
     </div>
   );
 }
+export default LoginPage
