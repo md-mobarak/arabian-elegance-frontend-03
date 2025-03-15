@@ -1,6 +1,4 @@
-// /* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable @next/next/no-img-element */
-// // /* eslint-disable @next/next/no-img-element */
+
 // import React, { useEffect, useState } from "react";
 // import Image from "next/image";
 // import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
@@ -88,8 +86,7 @@
 // export default HeroSection;
 
 
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @next/next/no-img-element */
+
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";

@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+
 import localFont from "next/font/local";
 
 import Navbar from "@/components/Navbar";
