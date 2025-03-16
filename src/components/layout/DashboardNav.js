@@ -73,7 +73,7 @@ export default function DashboardNav({ toggleSidebar }) {
   return (
     <header className="bg-white shadow p-4 fixed top-0 left-0 right-0 flex items-center justify-between px-6 md:px-10 h-16 z-10">
       {/* Left - Hamburger Menu */}
-      <button onClick={toggleSidebar} className="text-green-600 text-2xl">
+      <button onClick={toggleSidebar} className="text-orange-600 text-2xl">
         <RxHamburgerMenu />
       </button>
 

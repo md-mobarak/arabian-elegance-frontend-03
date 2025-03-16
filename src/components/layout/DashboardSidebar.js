@@ -13,7 +13,7 @@ export default function DashboardSidebar({ isOpen, toggleSidebar }) {
   const pathname = usePathname();
 
   const isActive = (route) => {
-    return pathname === route ? "bg-green-500 text-white" : "hover:bg-gray-100";
+    return pathname === route ? "bg-orange-500 text-white" : "hover:bg-gray-200";
   };
 
   const router = useRouter();
@@ -115,7 +115,7 @@ export default function DashboardSidebar({ isOpen, toggleSidebar }) {
       </ul>
 
       <div className="mt-6">
-        <button onClick={handleLogout}  className="w-full flex items-center p-3 bg-green-500 text-white rounded-lg hover:bg-green-600">
+        <button onClick={handleLogout}  className="w-full flex items-center p-3 bg-orange-500  text-white rounded-lg hover:bg-orange-400">
           <IoIosLogOut className="text-lg" />
           {isOpen && <span className="ml-3">Log Out</span>}
         </button>
