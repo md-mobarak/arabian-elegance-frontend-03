@@ -376,7 +376,7 @@ const ProductManagement = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Sizes</label>
             <div className="grid grid-cols-3 gap-2">
-              {["S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "36", "38"].map(size => (
+              {["S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "36", "38","40","42","44"].map(size => (
                 <label key={size} className="flex items-center">
                   <input
                     type="checkbox"

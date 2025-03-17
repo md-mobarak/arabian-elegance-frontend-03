@@ -124,14 +124,18 @@ const CategoryManagement = () => {
         method: "DELETE",
         headers: getHeaders()
       });
+      console.log(res,id)
       if (res.status === 401) throw new Error("Unauthorized");
       return res.json();
+   
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["categories"]);
       toast.success("Category deleted successfully");
+      console.log(toast)
     },
     onError: (error) => {
+      console.log(error)
       toast.error(error.message === "Unauthorized" ? "Login expired!" : "Delete failed");
     }
   });

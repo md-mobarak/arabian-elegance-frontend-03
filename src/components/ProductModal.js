@@ -103,7 +103,7 @@ export default function ProductModal({ isOpen, onClose, children }) {
 
   return (
     <dialog ref={dialogRef} className="modal p-5 rounded-lg shadow-xl">
-      <div className="modal-box">
+      <div className="modal-box w-full h-screen">
         <div className="modal-action relative">
           <button
             className="btn btn-sm btn-circle absolute right-0 top-1"

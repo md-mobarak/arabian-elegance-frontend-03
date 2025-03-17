@@ -271,7 +271,7 @@ const Shop = () => {
                 </div>
               ) : data?.products?.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 space-y-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                     {data.products.map((product) => (
                       <Card
                         key={product._id}
