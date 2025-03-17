@@ -16,7 +16,7 @@ function UpToProduct() {
           {/* Card 1 */}
           <div
             className="bg-white rounded-3xl shadow-xl p-6 flex flex-col md:flex-row items-center gap-4 relative border border-black"
-            data-aos="fade-up-right" 
+            data-aos="fade-up-bottom" 
             data-aos-duration="1000"
           >
             <div className="text-center md:text-left">
@@ -39,7 +39,7 @@ function UpToProduct() {
           {/* Card 2 */}
           <div
             className="bg-white rounded-3xl shadow-xl p-6 flex flex-col md:flex-row items-center gap-4 relative border border-black"
-            data-aos="fade-up-left"
+            data-aos="fade-up-bottom" 
             data-aos-duration="1000"
           >
             <div className="text-center md:text-left">
