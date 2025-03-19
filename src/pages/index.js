@@ -8,7 +8,7 @@ import "aos/dist/aos.css";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 
-
+import { Analytics } from "@vercel/analytics/react"
 export default function Home() {
   // Move useEffect inside the functional component
   // useEffect(() => {

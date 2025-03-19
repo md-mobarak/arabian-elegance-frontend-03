@@ -56,7 +56,7 @@ const ProductManagement = () => {
   });
 
   // Fetch products
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError,refetch  } = useQuery({
     queryKey: ["products", search, categoryFilter, minPrice, maxPrice, page],
     queryFn: async () => {
       const params = new URLSearchParams({
@@ -160,6 +160,7 @@ const ProductManagement = () => {
             })
             .then(() => {
               queryClient.invalidateQueries(["products"]);
+               refetch()
               toast.success("Product deleted");
             });
           }

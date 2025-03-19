@@ -1,12 +1,15 @@
+
+
 "use client";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { confirmAlert } from "react-confirm-alert";
 import Skeleton from "react-loading-skeleton";
-import { FaEdit, FaTrash, FaSearch, FaFilter } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch, FaFilter, FaInfoCircle } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import DatePicker from "react-datepicker";
+import Image from "next/image";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -22,6 +25,8 @@ const OrderManagement = () => {
   const [page, setPage] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
   const limit = 10;
 
   // Authentication State
@@ -62,6 +67,24 @@ const OrderManagement = () => {
       return res.json();
     }
   });
+
+  // Fetch Order Details
+  const fetchOrderDetails = async (orderId) => {
+    const res = await fetch(`${baseUrl}/order/${orderId}`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch order details");
+    return res.json();
+  };
+
+  // View Order Details Handler
+  const handleViewDetails = async (orderId) => {
+    try {
+      const details = await fetchOrderDetails(orderId);
+      setOrderDetails(details.data);
+      setIsDetailsModalOpen(true);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   // Update Order Mutation
   const updateMutation = useMutation({
@@ -142,12 +165,11 @@ const OrderManagement = () => {
       ]
     });
   };
-
+ console.log(orderDetails)
   return (
     <div className="p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        {/* <h1 className="text-3xl font-bold text-gray-800">Order Management</h1> */}
         <button
           onClick={resetFilters}
           className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg flex items-center gap-2"
@@ -257,6 +279,12 @@ const OrderManagement = () => {
                     </td>
                     <td className="px-6 py-4 space-x-2">
                       <button
+                        onClick={() => handleViewDetails(order._id)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        <FaInfoCircle className="text-xl" />
+                      </button>
+                      <button
                         onClick={() => {
                           setSelectedOrder(order);
                           setIsModalOpen(true);
@@ -306,9 +334,9 @@ const OrderManagement = () => {
         )}
       </div>
 
-      {/* Order Modal */}
+      {/* Edit Order Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">Edit Order</h3>
@@ -389,6 +417,106 @@ const OrderManagement = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Order Details Modal */}
+      {isDetailsModalOpen && orderDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Order Details</h3>
+              <button 
+                onClick={() => setIsDetailsModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <RxCross2 className="text-2xl" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="text-lg font-semibold mb-2">Customer Information</h4>
+                <div className="space-y-2">
+                  <p><span className="font-medium">Name:</span> {orderDetails.name}</p>
+                  <p><span className="font-medium">Email:</span> {orderDetails.email || 'N/A'}</p>
+                  <p><span className="font-medium">Phone:</span> +{orderDetails.phone}</p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-lg font-semibold mb-2">Shipping Address</h4>
+                <div className="space-y-2">
+                  <p><span className="font-medium">District:</span> {orderDetails.district}</p>
+                  <p><span className="font-medium">Thana:</span> {orderDetails.thana}</p>
+                  <p><span className="font-medium">Village:</span> {orderDetails.village}</p>
+                  <p><span className="font-medium">Address:</span> {orderDetails.streetAddress}</p>
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <h4 className="text-lg font-semibold mb-2">Products</h4>
+                <div className="space-y-4">
+                  {orderDetails?.products?.map((product, index) => (
+                    <div key={index} className="flex items-center gap-4 border-b pb-4">
+                      <div className="w-20 h-20 relative">
+                        <Image
+                          src={product?.product?.images}
+                          alt={product?.product?.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium">{product?.product?.title}</p>
+                        <p className="text-sm text-gray-500">
+                          Quantity: {product?.quantity}
+                        </p>
+                        <p className="text-sm">
+                          Price: ৳{product?.price?.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">
+                          Total: ৳{(product?.price * product?.quantity).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <h4 className="text-lg font-semibold mb-2">Order Summary</h4>
+                <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+                  <div>
+                    <p><span className="font-medium">Order Date:</span> {new Date(orderDetails.orderDate).toLocaleDateString()}</p>
+                    <p className={getStatusBadge(orderDetails?.status)}>
+                      Status: {orderDetails?.status}
+                    </p>
+                  </div>
+                  <div>
+                    <p className={getPaymentBadge(orderDetails?.paymentStatus)}>
+                      Payment: {orderDetails?.paymentStatus}
+                    </p>
+                    <p className="text-xl font-bold mt-2">
+                      Total Amount: ৳{orderDetails?.totalAmount.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {orderDetails?.additionalInformation && (
+                <div className="md:col-span-2">
+                  <h4 className="text-lg font-semibold mb-2">Additional Notes</h4>
+                  <p className="bg-gray-50 p-4 rounded-lg">
+                    {orderDetails?.additionalInformation}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

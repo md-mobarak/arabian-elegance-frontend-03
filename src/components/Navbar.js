@@ -17,6 +17,31 @@ const Navbar = () => {
   const [cartCount, setCartCount] = useState(0);
   const [animateCart, setAnimateCart] = useState(false);
 
+
+
+
+  // লোকালস্টোরেজ থেকে কার্টের সংখ্যা আপডেট করার ফাংশন
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCartCount(cart.reduce((total, item) => total + item.quantity, 0));
+  };
+
+  // যখন কম্পোনেন্ট লোড হবে, তখন একবার চলবে
+  useEffect(() => {
+    updateCartCount();
+
+    // লোকালস্টোরেজ পরিবর্তন হলে ইভেন্ট লিস্টেনার সেট করা
+    const handleStorageChange = () => {
+      updateCartCount();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const cartAnimation = useSpring({
     transform: animateCart ? 'scale(1.2)' : 'scale(1)',
     config: { tension: 300, friction: 10 },

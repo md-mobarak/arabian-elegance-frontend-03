@@ -1,10 +1,5 @@
-
-
 'use client';
-
 import { useParams, useRouter } from 'next/navigation';
-import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
@@ -16,9 +11,28 @@ import { baseUrl } from '@/utils/api';
 import Card from '@/components/Card';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+/* eslint-disable @next/next/no-img-element */
+import React, { useRef } from "react";
+import { GiBeveledStar } from "react-icons/gi";
+
+import { GoArrowLeft, GoArrowRight } from "react-icons/go";
+import { IoMdStar } from "react-icons/io";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Mousewheel, Keyboard, Autoplay,Thumbs, FreeMode  } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 // import ProductCard from '@/components/ProductCard';
+// import SwiperCore from "swiper";
+
+
+import "swiper/css";
+import "swiper/css/thumbs";
+
+// SwiperCore.use([Thumbs]);
 
 const ProductDetails = () => {
+
+
   const router = useRouter();
   const [selectedSize, setSelectedSize] = useState('');
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -73,6 +87,8 @@ const ProductDetails = () => {
       router.push('/checkout');
     }
   };
+    const prevRef = useRef(null);
+    const nextRef = useRef(null);
 
   if (isLoading) {
     return (
@@ -111,7 +127,8 @@ const ProductDetails = () => {
         <div className="space-y-4">
           <Swiper
             navigation
-            thumbs={{ swiper: thumbsSwiper }}
+            // thumbs={{ swiper: thumbsSwiper }}
+            thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }} 
             modules={[Navigation, Thumbs]}
             className="rounded-xl shadow-lg"
           >
@@ -237,7 +254,7 @@ const ProductDetails = () => {
               className={`flex-1 py-3 rounded-lg font-medium ${
                 // product?.stock === 0 || !selectedSize
         
-                   'bg-gray-900 hover:bg-gray-800 text-white'
+                   'bg-black hover:bg-gray-800 text-white'
               }`}
             >
               Buy Now
@@ -271,38 +288,125 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Related Products Section */}
-      {relatedProducts?.products?.length > 0 && (
-        <section className="mt-16">
-          <h2 className="text-2xl font-bold mb-6">Related Products</h2>
-          <Swiper
-            spaceBetween={24}
-            slidesPerView={1.2}
-            navigation
-            breakpoints={{
-              640: { slidesPerView: 2.5 },
-              1024: { slidesPerView: 4 }
-            }}
-            modules={[Navigation]}
-          >
-            {relatedProducts.products.map((product) => (
-              <SwiperSlide key={product?._id}>
-                <Card
-                key={product?._id}
-                product={{
-                  ...product,
-                  name: product?.title,
-                  img: product?.images[0],
-                  price: product?.price,
-                  oldPrice: Math.round(product.price * 1.2),
-                  discount: '20% Off'
-                }}
+
+       {
+        relatedProducts?.products?.length > 0 && 
+         <div className="lg:my-20 my-10 lg:px-20 px-10">
+         {/* 1st section */}
+         <div className="relative">
+            {/* <p className="text-xl font-semibold text-pink-600"> <GiBeveledStar className="text-lg text-geen-500 px-2" /> Categories</p> */}
+                 <div className='flex  items-center'>
+                     <p><GiBeveledStar className='text-pink-700 font-bold text-xl' /></p>
+                     <p className='font-serif font-semibold text-pink-700'>Categories</p>
+                 </div>
+                 <h1 className="lg:text-4xl text-xl font-bold text-gray-600 font-serif">Related Products</h1>
+           
+                 {/* Custom Navigation Buttons */}
+                 <div className="absolute top-[30px] lg:right-20 right-[-20px] flex space-x-4 z-10">
+                   <button
+                     ref={prevRef}
+                     className="bg-black text-white p-2 w-12 h-12 rounded-full shadow-md 
+                                hover:bg-gray-700 transition-all duration-500"
+                   >
+                     <GoArrowLeft className="text-3xl" />
+                   </button>
+                   <button
+                     ref={nextRef}
+                     className="bg-black text-white p-2 w-12 h-12 rounded-full shadow-md 
+                                hover:bg-gray-700 transition-all duration-500"
+                   >
+                     <GoArrowRight className="text-3xl" />
+                   </button>
+                 </div>
+         </div>
+         {/* <div className="grid grid-cols-3 gap-6 p-6 "> */}
+   
+   {/* Swiper Slider */}
+   <Swiper
+    thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }} 
+           spaceBetween={30}
+           loop={true} // Enable infinite loop
+           autoplay={{
+             delay: 3000, // 2 seconds
+             disableOnInteraction: false, // Keep autoplay running even after interaction
+           }}
+           navigation={{
+             prevEl: prevRef.current,
+             nextEl: nextRef.current,
+           }}
+           onSwiper={(swiper) => {
+             // Attach custom navigation elements
+             swiper.params.navigation.prevEl = prevRef.current;
+             swiper.params.navigation.nextEl = nextRef.current;
+             swiper.navigation.init();
+             swiper.navigation.update();
+           }}
+           modules={[Navigation, Mousewheel, Keyboard, Autoplay]}
+           breakpoints={{
+             640: {
+               slidesPerView: 1,
+             },
+             768: {
+               slidesPerView: 2,
+             },
+             1024: {
+               slidesPerView: 3,
+             },
+           }}
+           className="mySwiper my-10"
+         >
+   
+   
+           {relatedProducts?.products?.map((product, index) => (
+                <SwiperSlide key={index}>
+
+            <button onClick={()=> router?.push(`/shop/${product._id}`)}>
+            <div key={product.id} className="p-3 rounded-3xl cursor-pointer">
+               <section>
+                 <img
+                   className=" z-50 rounded-[40px] p-4 lg:w-[318px] lg:h-[295px] md:w-[318px] md:h-[295px]"
+                   src={product.images[0]}
+                   alt={product.name}
                  />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-      )}
+               </section>
+               <section className="flex mt-[-230px] p-5 justify-between rounded-3xl items-end border border-dashed border-gray-400 h-80">
+                 <div>
+                   <p className="flex text-xl">
+                     {Array(5)
+                       .fill(0)
+                       .map((_, i) => (
+                         <IoMdStar
+                           key={i}
+                           className={`${
+                             i < Math.floor(product.rating)
+                               ? "text-pink-600"
+                               : "text-gray-300"
+                           }`}
+                         />
+                       ))}
+                     <span className="text-gray-700 text-sm">(80)</span>
+                   </p>
+                   <p className="text-gray-600 text-2xl font-semibold">
+                     {product.title}
+                   </p>
+                 </div>
+                 <div>
+                   <p className="text-xl font-semibold text-gray-600">
+                     {product.price}
+                   </p>
+                   <p className="text-xl font-semibold text-gray-600">
+                     <s>{Math.round(product.price * 1.2)}</s>
+                   </p>
+                 </div>
+               </section>
+             </div>
+            </button>
+             </SwiperSlide>
+           ))}
+            </Swiper>
+
+       </div>
+       }
     </main>
  <Footer></Footer>
  </>
