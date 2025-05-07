@@ -83,7 +83,7 @@ function Card({product,index}) {
         {product?.stock > 0 ? 'In Stock' : 'Out of Stock'}
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-2">
+      {/* <div className="mt-2 grid grid-cols-2 gap-2">
         <button
           // onClick={()=>handleAddToCart()}
           onClick={ handleCartAction}
@@ -109,6 +109,51 @@ function Card({product,index}) {
         >
           Buy Now
         </button>
+      </div> */}
+        <div className="mt-2 grid grid-cols-2 gap-2">
+        {/* <button
+          // onClick={()=>handleAddToCart()}
+          onClick={ handleCartAction}
+          disabled={product?.stock < 1 ||inCart}
+          className={`p-2  rounded-lg text-sm font-medium ${
+            product.stock < 1 
+              ? 'bg-gray-300 '
+              : 'bg-black hover:bg-black text-white'
+          }`}
+        >
+          {inCart ? 'Added to Cart' : 'Add to Cart'}
+        </button> */}
+       <button 
+          onClick={ handleCartAction}
+          disabled={product?.stock < 1 ||inCart}
+          className={`btn btn-xs rounded-none${
+            product.stock < 1 
+              ? 'bg-gray-300 '
+              : ' bg-orange-600 text-white border-0'
+          }`}
+       
+>Add to cart</button>
+
+        {/* <button
+          onClick={() => router.push(`/shop/${product._id}`)}
+          disabled={product?.stock === 0}
+          className={`p-2 rounded-lg text-sm font-medium ${
+            product?.stock === 0
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-orange-600 hover:bg-orange-700 text-white'
+          }`}
+        >
+          Buy Now
+        </button> */}
+        <button
+            onClick={() => router.push(`/shop/${product._id}`)}
+            disabled={product?.stock === 0}
+            className={`btn btn-xs bg-black text-white border-0 rounded-none ${
+              product?.stock === 0
+                ? 'bg-gray-300  cursor-not-allowed'
+                : 'bg-black text-white border-0'
+            }`}
+       >Buy Now</button>
       </div>
     </div>
   </div>
